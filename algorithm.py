@@ -40,10 +40,6 @@ class Goods(object):
     def __eq__(self, other):
         return isinstance(other, Goods) and self.name == other.name
 
-G1 = Goods("food", 3)
-G2 = Goods("water", 1)
-G3 = Goods("clothes", 5)
-
 r1 = Recipients("r1", -50, 100, ["food", "water"])
 r2 = Recipients("r2", -25, 60, ["water"])
 r3 = Recipients("r3", -2, 10, [])

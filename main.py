@@ -13,7 +13,11 @@ class Users(object):
         return ((self.x-other.x)**2 + (self.y-other.y)**2)**0.5
 
     def __repr__(self):
-        return f"Name: {self.name}, xcor: {self.x}, ycor: {self.y}, items: {self.items}"
+        stringItems = ""
+        for item in self.items:
+            stringItems += item + ", "
+        stringItems = stringItems[:-2]
+        return f"{self.name}: Location: ({self.x}, {self.y}). Items: {stringItems}"
 
 class Recipients(Users):
     def __init__(self, name, xcor, ycor, items):
@@ -32,42 +36,41 @@ class Organizations(Volunteers):
         super().__init__(name, xcor, ycor, items)
         self.time = time
 
-r1 = Recipients("r1", -50, 100, ["food", "water"])
-r2 = Recipients("r2", -25, 60, ["water"])
+r1 = Recipients("r1", -50, 100, ["bedding", "clothes", 'electronics'])
+r2 = Recipients("r2", -25, 60, ["produce"])
 r3 = Recipients("r3", -2, 10, [])
-r4 = Recipients("r4", 63, 15, ["food"])
-r5 = Recipients("r5", 64, 38, ["food", "water"])
+r4 = Recipients("r4", 63, 15, ["nonperishables"])
+r5 = Recipients("r5", 64, 38, ["produce", "nonperishables"])
 r6 = Recipients("r6", -30, 19, [])
-r7 = Recipients("r7", 24, 56, ["food", "water"])
-r8 = Recipients("r8", 80, -100, ["water", "food"])
-r9 = Recipients("r9", 24, 73, ["water"])
-r10 = Recipients("r10", 19, 10, ["water"])
-r11 = Recipients("r11", 35, 90, ["food", "water"])
-r12 = Recipients("r12", 0, 0, ["water", "food"])
-r13 = Recipients("r13", 99, 2, ["water", "food"])
-r14 = Recipients("r14", 2, 30, ["food"])
-r15 = Recipients("r15", 44, -87, ["food"])
-r16 = Recipients("r16", -48, 0, ["food"])
-r17 = Recipients("r17", -43, 2, ["water"])
-r18 = Recipients("r18", -90, -11, ["water"])
-r19 = Recipients("r19", 45, 23, ["water"])
-r20 = Recipients("r20", 10, 11, ["blankets"])
-r21 = Recipients("r21", 11, 11, ["food", "water"])
+r7 = Recipients("r7", 24, 56, ["nonperishables", "water"])
+r8 = Recipients("r8", 80, -100, ['stationaries', "nonperishables", 'electronics'])
+r9 = Recipients("r9", 24, 73, ["clothes"])
+r10 = Recipients("r10", 19, 10, ["clothes", 'electronics'])
+r11 = Recipients("r11", 35, 90, ["bedding", "hygiene"])
+r12 = Recipients("r12", 0, 0, ["stationaries", "hygiene"])
+r13 = Recipients("r13", 99, 2, ["nonperishables", "bedding", 'stationaries'])
+r14 = Recipients("r14", 2, 30, ["produce"])
+r15 = Recipients("r15", 44, -87, ["medicines", 'electronics'])
+r16 = Recipients("r16", -48, 0, ["toys", "books"])
+r17 = Recipients("r17", -43, 2, ["books", "medicines"])
+r18 = Recipients("r18", -90, -11, ["clothes", "bedding"])
+r19 = Recipients("r19", 45, 23, ["toys", "clothes"])
+r20 = Recipients("r20", 10, 11, ["bedding"])
+r21 = Recipients("r21", 11, 11, ["bedding", "toys"])
 recipientList = [r21, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20]
 
-o1 = Organizations("o1", -50, 100, ["food", "water", "clothes"], "14:30")
-o2 = Organizations("o2", -25, 60, ["water", "clothes"], "12:00")
-o3 = Organizations("o3", -2, 10, [], "15:00")
-o4 = Organizations("o4", 63, 15, ["food"], "16:00")
-o5 = Organizations("o5", 64, 38, ["food", "water"], "9:00")
-o6 = Organizations("o6", -30, 19, ["clothes"], "10:00")
-o7 = Organizations("o7", 24, 56, ["food", "water"], "17:00")
-o8 = Organizations("o8", 80, -100, ["water", "food"], "18:30")
-o9 = Organizations("o9", 24, 73, ["water", "clothes"], "8:00")
-o10 = Organizations("o10", 19, 10, ["water", "food"], "11:30")
+o1 = Organizations("o1", -50, 100, ["hygiene", "electronics", "bedding"], "14:30")
+o2 = Organizations("o2", -25, 60, ["stationaries", "medicines"], "12:00")
+o3 = Organizations("o3", -2, 10, ["electronics", "nonperishables", "clothes"], "15:00")
+o4 = Organizations("o4", 63, 15, ["produce", 'medicines'], "16:00")
+o5 = Organizations("o5", 64, 38, ["produce", 'books'], "9:00")
+o6 = Organizations("o6", -30, 19, ["toys"], "10:00")
+o7 = Organizations("o7", 24, 56, ["hygiene", "clothes", "nonperishables"], "17:00")
+o8 = Organizations("o8", 80, -100, ["toys", "produce"], "18:30")
+o9 = Organizations("o9", 24, 73, ["stationaries", "clothes", "medicines", "clothes"], "8:00")
+o10 = Organizations("o10", 19, 10, ["electronics", "produce", "stationaries", 'books'], "11:30")
 
 orgsList = [o1, o2, o3, o4, o5, o6, o7, o8, o9, o10]
-
 
 class StartMode(Mode):
     def appStarted(mode):
@@ -118,7 +121,8 @@ class IndividualMode(Mode):
     def appStarted(self):
         self.stringInput = ''
         self.volunteer = Volunteers('John', 10, 11,[])
-        self.possibleItems = ['food','water','blankets']
+        self.possibleItems = ['bedding','books','toys', 'clothes', 'medicines', 'hygiene',
+                              'stationaries', 'produce', 'nonperishables', 'electronics']
         url = 'https://i.imgur.com/99OnK6m.png'
         self.findRecipientButton = self.loadImage(url)
         self.foundRecipient = Recipients('John', 0,0,[])
@@ -251,7 +255,7 @@ class IndividualMode(Mode):
 
     #this function redraws everything
     def redrawAll(self, canvas):
-        font = 'futura 15'
+        font = 'futura 12'
         canvas.create_text(self.width / 2, 75, text = 'Your input:')
         canvas.create_text(self.width / 2,100,text = self.stringInput)
         canvas.create_rectangle(self.width / 2 - 50,85,self.width / 2 + 50,115)
@@ -276,7 +280,8 @@ class IndividualMode(Mode):
 class RecipientMode(Mode):
     def appStarted(self):
         self.stringInput = ''
-        self.possibleItems = ['food','water','blankets']
+        self.possibleItems = ['bedding','books','toys', 'clothes', 'medicines', 'hygiene',
+                              'stationaries', 'produce', 'nonperishables', 'electronics']
         self.locationBool = False
         self.recipient = Recipients('', 0,0,[])
         url1 = 'https://i.imgur.com/1N4h7mW.png'
@@ -285,6 +290,9 @@ class RecipientMode(Mode):
         self.submitButton = self.loadImage(url)
         self.time = '00:00'
         self.nameBool = False
+        self.orgListBool = False
+        self.backBool = False
+        self.submittedBool = False
         
     def startScreenMode(mode):
         print("activated")
@@ -404,12 +412,18 @@ class RecipientMode(Mode):
         if event.x >= mode.width / 2 - 47 and event.x <= mode.width / 2 + 47 and event.y >= mode.height / 2 - 17.5 and event.y <= mode.height / 2 + 17.5:
             newRecipient = Recipients(mode.recipient.name, mode.recipient.x,mode.recipient.y, mode.recipient.items)
             recipientList.append(newRecipient)
-            print(orgsList)
+            mode.orgListBool = True
+            print(recipientList)
+            mode.submittedBool = True
         if event.x >= 15 and event.x <= 92 and event.y >= 15 and event.y <= 50:
             mode.startScreenMode()
-            print('functioning')      
+            mode.app.recipientMode
+            mode.backBool = True
+            if mode.backBool and mode.submittedBool:
+                mode.appStarted()
         
     def redrawAll(mode, canvas):
+        font = "futura 12"
         if mode.nameBool == False:
             canvas.create_text(mode.width / 2, 25, text = 'Enter name')
         else:
@@ -429,13 +443,17 @@ class RecipientMode(Mode):
         canvas.create_text(mode.width / 2,150,text = commaString)
         canvas.create_text(mode.width / 2, 175, text = 'Location:')
         canvas.create_text(mode.width / 2,200,text = f'({mode.recipient.x},{mode.recipient.y})')
-    #goes back to game mode after any key is pressed while in the help mode
+        #goes back to game mode after any key is pressed while in the help mode
+        if mode.orgListBool:
+            for index in range(len(orgsList)):
+                canvas.create_text(mode.width / 2, mode.height / 2 + 30 + 20 * index, text = str(orgsList[index]), font = font)
     
 
 class OrganizationMode(Mode):
     def appStarted(self):
         self.stringInput = ''
-        self.possibleItems = ['food','water','blankets']
+        self.possibleItems = ['bedding','books','toys', 'clothes', 'medicines', 'hygiene',
+                              'stationaries', 'produce', 'nonperishables', 'electronics']
         self.timeBool = False
         self.locationBool = False
         self.organization = Organizations('', 0,0,[],'00:00')
@@ -583,31 +601,40 @@ class OrganizationMode(Mode):
             print(orgsList)
         if event.x >= 15 and event.x <= 92 and event.y >= 15 and event.y <= 50:
             mode.startScreenMode()
-            print('functioning')        
+            print('functioning')
         
     def redrawAll(mode, canvas):
+        font = "futura 12"
         if mode.nameBool == False:
+            canvas.create_rectangle(mode.width / 2 - 70, 15, mode.width / 2 + 70, 40, fill = "yellow")
+            canvas.create_text(mode.width / 2, 125, text = "Please press enter to confirm name")
             canvas.create_text(mode.width / 2, 25, text = 'Enter Name:')
         else:
             if mode.timeBool == False:
+                canvas.create_rectangle(mode.width / 2 - 45, 15, mode.width / 2 + 45, 40, fill = "yellow")
+                canvas.create_text(mode.width / 2, 125, text = 'Please press space when you finish entering inputs', font = font)
                 canvas.create_text(mode.width / 2, 25, text = 'Enter items:')
             else:
                 if mode.locationBool == False:
+                    canvas.create_rectangle(mode.width / 2 - 45, 15, mode.width / 2 + 45, 40, fill = "yellow")
+                    canvas.create_text(mode.width / 2, 125, text = "Please press enter to confirm time")
                     canvas.create_text(mode.width / 2, 25, text = 'Enter time: "XX:XX"')
                 else:
+                    canvas.create_rectangle(mode.width / 2 - 45, 15, mode.width / 2 + 45, 40, fill = "yellow")
+                    canvas.create_text(mode.width / 2, 125, text = "Please press enter to confirm location")
                     canvas.create_text(mode.width / 2, 25, text = 'Enter location: "X,X"')
         canvas.create_text(mode.width / 8, 75, text = 'Name:')
         canvas.create_text(mode.width / 8,100,text = mode.organization.name)
         canvas.create_text(mode.width / 2, 75, text = 'Your input:')
         canvas.create_text(mode.width / 2,100,text = mode.stringInput)
-        canvas.create_rectangle(mode.width / 2 - 50,85,mode.width / 2 + 50,115)
+        canvas.create_rectangle(mode.width / 2 - 50, 85,mode.width / 2 + 50,115)
         canvas.create_image(53, 32.5, image = ImageTk.PhotoImage(mode.backButton))
         canvas.create_image(mode.width / 2,mode.height / 2, image = ImageTk.PhotoImage(mode.submitButton))
-        canvas.create_text(mode.width / 2, 125, text = 'This is what you have:')
+        canvas.create_text(mode.width / 2, 145, text = 'This is what you have:')
         commaString = ', '.join(mode.organization.items)
-        canvas.create_text(mode.width / 2,150,text = commaString)
-        canvas.create_text(mode.width / 2, 175, text = 'Time available for pickup:')
-        canvas.create_text(mode.width / 2,200,text = mode.time)
+        canvas.create_text(mode.width / 2,165,text = commaString)
+        canvas.create_text(mode.width / 2, 185, text = 'Time available for pickup:')
+        canvas.create_text(mode.width / 2,205,text = mode.time)
         canvas.create_text(mode.width / 2, 300, text = 'Location:')
         canvas.create_text(mode.width / 2,325,text = f'({mode.organization.x},{mode.organization.y})')
 
@@ -620,4 +647,4 @@ class MyModalApp(ModalApp):
         app.setActiveMode(app.startScreenMode)
         app.timerDelay = 50
 
-app = MyModalApp(width=500, height=500)
+app = MyModalApp(width=650, height=650)
