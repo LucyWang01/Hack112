@@ -130,6 +130,9 @@ class IndividualMode(Mode):
         self.giveInstructions = False
         url1 = 'https://i.imgur.com/1N4h7mW.png'
         self.backButton = self.loadImage(url1)
+        urlItems = 'https://i.imgur.com/ICizG3j.png'
+        self.itemImage = self.loadImage(urlItems)
+        self.itemImage = self.scaleImage(self.itemImage, .8)
         
     def startScreenMode(mode):
         print("activated")
@@ -256,6 +259,7 @@ class IndividualMode(Mode):
     #this function redraws everything
     def redrawAll(self, canvas):
         font = 'futura 12'
+        canvas.create_image(self.width / 2, self.height * 3 / 4, image = ImageTk.PhotoImage(self.itemImage))
         canvas.create_text(self.width / 2, 75, text = 'Your input:')
         canvas.create_text(self.width / 2,100,text = self.stringInput)
         canvas.create_rectangle(self.width / 2 - 50,85,self.width / 2 + 50,115)
@@ -293,6 +297,9 @@ class RecipientMode(Mode):
         self.orgListBool = False
         self.backBool = False
         self.submittedBool = False
+        urlItems = 'https://i.imgur.com/ICizG3j.png'
+        self.itemImage = self.loadImage(urlItems)
+        self.itemImage = self.scaleImage(self.itemImage, .8)
         
     def startScreenMode(mode):
         print("activated")
@@ -429,6 +436,7 @@ class RecipientMode(Mode):
         else:
             if mode.locationBool == False:
                 canvas.create_text(mode.width / 2, 25, text = 'Enter items')
+                canvas.create_image(mode.width / 2, mode.height * 3 / 4, image = ImageTk.PhotoImage(mode.itemImage))
             else:
                 canvas.create_text(mode.width / 2, 25, text = 'Enter location: "X,X"')
         canvas.create_text(mode.width / 8, 75, text = 'Name:')
@@ -464,6 +472,9 @@ class OrganizationMode(Mode):
         self.time = '00:00'
         self.name = ''
         self.nameBool = False
+        urlItems = 'https://i.imgur.com/ICizG3j.png'
+        self.itemImage = self.loadImage(urlItems)
+        self.itemImage = self.scaleImage(self.itemImage, .8)
         
     def startScreenMode(mode):
         print("activated")
@@ -614,6 +625,7 @@ class OrganizationMode(Mode):
                 canvas.create_rectangle(mode.width / 2 - 45, 15, mode.width / 2 + 45, 40, fill = "yellow")
                 canvas.create_text(mode.width / 2, 125, text = 'Please press space when you finish entering inputs', font = font)
                 canvas.create_text(mode.width / 2, 25, text = 'Enter items:')
+                canvas.create_image(mode.width / 2, mode.height * 3 / 4, image = ImageTk.PhotoImage(mode.itemImage))
             else:
                 if mode.locationBool == False:
                     canvas.create_rectangle(mode.width / 2 - 45, 15, mode.width / 2 + 45, 40, fill = "yellow")
