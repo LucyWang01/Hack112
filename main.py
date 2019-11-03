@@ -4,37 +4,46 @@ from PIL import Image
 import random
 
 class Users(object):
-    def __init__():
-        self.x = x
-        self.y = y
-        
+    def __init__(self, name, xcor, ycor, items):
+        self.name = name
+        self.x = xcor
+        self.y = ycor
+        self.items = items
 
 class Volunteers(Users):
-    pass
-    
+    def __init__(self, name, xcor, ycor):
+        super().__init__(name, xcor, ycor)
     
 class Organizations(Volunteers):
-    pass
-    
+    def __init__(self, name, xcor, ycor):
+        super().__init__(name, xcor, ycor)
+
 class Individuals(Volunteers):
-    pass
+    def __init__(self, name, xcor, ycor):
+        super.__init__(name, xcor, ycor)
+
     
 class Recipients(Users):
-    def __init__():
-        super().__init__()
-        pass
+    def __init__(self, name, xcor, ycor):
+        super().__init__(name, xcor, ycor)
 
 class StartMode(Mode):
     def redrawAll(mode, canvas):
         font = 'Arial 26 bold'
         canvas.create_rectangle(0, 0, mode.width, mode.height,
                                 fill = 'lightblue')
-        
-    
-    ### selection: volunteers, Recipients
 
+class IndividualsMode(Mode):
+    def appStarted(mode):
+        mode.individual = Individuals()
+
+class OrganizationsMode(Mode):
+    def appStarted(mode):
+        mode.organization = Organizations()
+        
+    ### selection: volunteers, Recipients
 '''
-    def mousePressed(mode, event):
+def mousePressed(mode, event):
         if:
             mode.app.setActiveMode(mode.app.VolunteersMode)
         elif:
