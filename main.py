@@ -1,72 +1,3 @@
-'''from cmu_112_graphics import *
-from tkinter import *
-from PIL import Image 
-import random
-class Users(object):
-    def __init__(self, name, xcor, ycor, items):
-        self.name = name
-        self.x = xcor
-        self.y = ycor
-        self.items = items
-class Volunteers(Users):
-    def __init__(self, name, xcor, ycor):
-        super().__init__(name, xcor, ycor)
-    
-class Organizations(Volunteers):
-    def __init__(self, name, xcor, ycor):
-        super().__init__(name, xcor, ycor)
-class Individuals(Volunteers):
-    def __init__(self, name, xcor, ycor):
-        super.__init__(name, xcor, ycor)
-    
-class Recipients(Users):
-    def __init__(self, name, xcor, ycor):
-        super().__init__(name, xcor, ycor)
-class StartMode(Mode):
-    def appStarted(mode):
-        mode.indiOG = mode.loadImage('Individual.png')
-        mode.indi = mode.scaleImage(mode.indiOG, 1/2)
- 
-        mode.orgOG = mode.loadImage('Organizations.jpg')
-        
-        mode.org = mode.scaleImage(mode.orgOG, 2/3)
- 
-    def redrawAll(mode, canvas):
-        font = 'Arial 26 bold'
-        canvas.create_rectangle(0, 0, mode.width, mode.height,
-                                fill = 'lightblue')
-        canvas.create_image(200, 300, image=ImageTk.PhotoImage(mode.indi))
-        canvas.create_image(500, 300, image=ImageTk.PhotoImage(mode.org))
-class IndividualsMode(Mode):
-    def appStarted(mode):
-        mode.individual = Individuals()
-class OrganizationsMode(Mode):
-    def appStarted(mode):
-        mode.organization = Organizations()
-        
-    ### selection: volunteers, Recipients
-'''
-'''
-def mousePressed(mode, event):
-        if:
-            mode.app.setActiveMode(mode.app.VolunteersMode)
-        elif:
-            mode.app.setActiveMode(mode.app.RecipientsMode)
-class MyModalApp(ModalApp):
-    def appStarted(app):
-        app.StartMode = StartMode()
-        app.IndividualsMode = IndividualsMode()
-        app.OrganizationsMode = OrganizationsMode()
-        #app.RecipientsMode = RecipientsMode()
-        app.setActiveMode(app.StartMode)
-        app.timerDelay = 50
-    
-MyModalApp(width=500, height=500)
-    
-########
-class Goods(object):
-    pass
-'''
 from cmu_112_graphics import *
 from tkinter import *
 import random
@@ -300,6 +231,9 @@ class IndividualMode(Mode):
             self.stringInput += 'z'
         elif (event.key == 'Space'):
             self.giveRecipient(self.foundRecipient)
+        elif(event.key == 'Delete'):
+            if len(self.stringInput) >= 1:
+                self.stringInput = self.stringInput[:len(self.stringInput) - 1]
         elif (event.key == 'Enter'):
             if self.stringInput not in self.possibleItems:
                 print('not valid')
@@ -343,46 +277,14 @@ class RecipientMode(Mode):
     def appStarted(self):
         self.stringInput = ''
         self.possibleItems = ['food','water','blankets']
-        url = 'https://i.imgur.com/9cRy6y4.png'
-        self.submitButton = self.loadImage(url)
-        url1 = 'https://i.imgur.com/1N4h7mW.png'
-        self.backButton = self.loadImage(url1)
-        
-    def startScreenMode(mode):
-        print("activated")
-        mode.app.setActiveMode(mode.app.startScreenMode)
-                
-    
-    def redrawAll(mode, canvas):
-        font = 'Arial 15 bold'
-        canvas.create_image(53, 32.5, image = ImageTk.PhotoImage(mode.backButton))
-        canvas.create_image(mode.width / 2,mode.height / 2, image = ImageTk.PhotoImage(mode.submitButton))
-        
-
-    #goes back to game mode after any key is pressed while in the help mode
-    def mousePressed(mode, event):
-        if event.x >= mode.width / 2 - 47 and event.x <= mode.width / 2 + 47 and event.y >= mode.height / 2 - 17.5 and event.y <= mode.height / 2 + 17.5:
-            #do something with to add to your recipient list 
-            print('yes')
-            newRecipient = Recipients("John", 15,15, ['food'])
-            recipientList.append(newRecipient)
-            print(recipientList)
-        if event.x >= 15 and event.x <= 92 and event.y >= 15 and event.y <= 50:
-            mode.startScreenMode()
-            print('functioning')
-
-class OrganizationMode(Mode):
-    def appStarted(self):
-        self.stringInput = ''
-        self.possibleItems = ['food','water','blankets']
-        self.timeBool = False
         self.locationBool = False
-        self.organization = Organizations('initial', 0,0,[],'00:00')
+        self.recipient = Recipients('', 0,0,[])
         url1 = 'https://i.imgur.com/1N4h7mW.png'
         self.backButton = self.loadImage(url1)
         url = 'https://i.imgur.com/9cRy6y4.png'
         self.submitButton = self.loadImage(url)
         self.time = '00:00'
+        self.nameBool = False
         
     def startScreenMode(mode):
         print("activated")
@@ -465,45 +367,218 @@ class OrganizationMode(Mode):
         elif (event.key == ':'):
             self.stringInput += ':'
         elif (event.key == 'Space'):
-            self.timeBool = True
+            if self.nameBool != True:
+                self.stringInput += ' '
+            else:
+                self.locationBool = True
         elif (event.key == ','):
             self.stringInput += ','
+        elif(event.key == 'Delete'):
+            if len(self.stringInput) >= 1:
+                self.stringInput = self.stringInput[:len(self.stringInput) - 1]
         elif (event.key == 'Enter'):
-            if self.timeBool == False:
-                if self.stringInput not in self.possibleItems:
-                    print('not valid2')
-                    self.stringInput = ''
-                else: 
-                    self.organization.items.append(self.stringInput)
-                    self.stringInput = ''
-            elif self.timeBool == True and not self.locationBool:
-                print(self.stringInput)
-                print(self.stringInput[2])
-                if self.stringInput[2] == ':' and self.stringInput[:1].isdigit():
-                    self.time = self.stringInput
-                    print('successfully entered time')
-                    self.stringInput = ''
-                    self.locationBool = True
-                else:
-                    print('not valid1')
-                    print(self.stringInput)
-                    self.stringInput = ''
-                    print(self.stringInput)
-            else: 
-                for index in range(0,len(self.stringInput)):
-                    if self.stringInput[index] == ',':
-                        commaIndex = index
-                print(commaIndex)
-                self.organization.x = int(self.stringInput[0:index-1])
-                self.organization.y = int(self.stringInput[index:])
+            if self.nameBool == False:
+                self.recipient.name = self.stringInput
+                self.nameBool = True
                 self.stringInput = ''
-                print('successfully entered location')
+                print('name work')
+            else:
+                if self.locationBool == False:
+                    if self.stringInput not in self.possibleItems:
+                        print('not valid2')
+                        self.stringInput = ''
+                    else: 
+                        self.recipient.items.append(self.stringInput)
+                        self.stringInput = ''
+                else: 
+                    for index in range(0,len(self.stringInput)):
+                        if self.stringInput[index] == ',':
+                            commaIndex = index
+                    print(commaIndex)
+                    self.recipient.x = int(self.stringInput[0:index-1])
+                    self.recipient.y = int(self.stringInput[index:])
+                    self.stringInput = ''
+                    print('successfully entered location')
+                
+    def mousePressed(mode, event):
+        if event.x >= mode.width / 2 - 47 and event.x <= mode.width / 2 + 47 and event.y >= mode.height / 2 - 17.5 and event.y <= mode.height / 2 + 17.5:
+            newRecipient = Recipients(mode.recipient.name, mode.recipient.x,mode.recipient.y, mode.recipient.items)
+            recipientList.append(newRecipient)
+            print(orgsList)
+        if event.x >= 15 and event.x <= 92 and event.y >= 15 and event.y <= 50:
+            mode.startScreenMode()
+            print('functioning')      
+        
+    def redrawAll(mode, canvas):
+        if mode.nameBool == False:
+            canvas.create_text(mode.width / 2, 25, text = 'Enter name')
+        else:
+            if mode.locationBool == False:
+                canvas.create_text(mode.width / 2, 25, text = 'Enter items')
+            else:
+                canvas.create_text(mode.width / 2, 25, text = 'Enter location: "X,X"')
+        canvas.create_text(mode.width / 8, 75, text = 'Name:')
+        canvas.create_text(mode.width / 8,100,text = mode.recipient.name)
+        canvas.create_text(mode.width / 2, 75, text = 'Your input:')
+        canvas.create_text(mode.width / 2,100,text = mode.stringInput)
+        canvas.create_rectangle(mode.width / 2 - 50,85,mode.width / 2 + 50,115)
+        canvas.create_image(53, 32.5, image = ImageTk.PhotoImage(mode.backButton))
+        canvas.create_image(mode.width / 2,mode.height / 2, image = ImageTk.PhotoImage(mode.submitButton))
+        canvas.create_text(mode.width / 2, 125, text = 'This is what you have:')
+        commaString = ', '.join(mode.recipient.items)
+        canvas.create_text(mode.width / 2,150,text = commaString)
+        canvas.create_text(mode.width / 2, 175, text = 'Location:')
+        canvas.create_text(mode.width / 2,200,text = f'({mode.recipient.x},{mode.recipient.y})')
+    #goes back to game mode after any key is pressed while in the help mode
+    
+
+class OrganizationMode(Mode):
+    def appStarted(self):
+        self.stringInput = ''
+        self.possibleItems = ['food','water','blankets']
+        self.timeBool = False
+        self.locationBool = False
+        self.organization = Organizations('', 0,0,[],'00:00')
+        url1 = 'https://i.imgur.com/1N4h7mW.png'
+        self.backButton = self.loadImage(url1)
+        url = 'https://i.imgur.com/9cRy6y4.png'
+        self.submitButton = self.loadImage(url)
+        self.time = '00:00'
+        self.name = ''
+        self.nameBool = False
+        
+    def startScreenMode(mode):
+        print("activated")
+        mode.app.setActiveMode(mode.app.startScreenMode)
+        
+    def keyPressed(self, event):
+        commaIndex = 0
+        if (event.key == "a"):  
+            self.stringInput += 'a'
+        elif (event.key == "b"):
+            self.stringInput += 'b'
+        elif (event.key == "c"):
+            self.stringInput += 'c'
+        elif (event.key == 'd'):
+            self.stringInput += 'd'
+        elif (event.key == 'e'):
+            self.stringInput += 'e'
+        elif (event.key == 'f'):
+            self.stringInput += 'f'
+        elif (event.key == 'g'):
+            self.stringInput += 'g'
+        elif (event.key == 'h'):
+            self.stringInput += 'h'
+        elif (event.key == 'i'):
+            self.stringInput += 'i'
+        elif (event.key == 'j'):
+            self.stringInput += 'j'
+        elif (event.key == 'k'):
+            self.stringInput += 'k'
+        elif (event.key == 'l'):
+            self.stringInput += 'l'
+        elif (event.key == 'm'):
+            self.stringInput += 'm'
+        elif (event.key == 'n'):
+            self.stringInput += 'n'
+        elif (event.key == 'o'):
+            self.stringInput += 'o'
+        elif (event.key == 'p'):
+            self.stringInput += 'p'
+        elif (event.key == 'q'):
+            self.stringInput += 'q'
+        elif (event.key == 'r'):
+            self.stringInput += 'r'
+        elif (event.key == 's'):
+            self.stringInput += 's'
+        elif (event.key == 't'):
+            self.stringInput += 't'
+        elif (event.key == 'u'):
+            self.stringInput += 'u'
+        elif (event.key == 'v'):
+            self.stringInput += 'v'
+        elif (event.key == 'w'):
+            self.stringInput += 'w'
+        elif (event.key == 'x'):
+            self.stringInput += 'x'
+        elif (event.key == 'y'):
+            self.stringInput += 'y'
+        elif (event.key == 'z'):
+            self.stringInput += 'z'
+        elif (event.key == '1'):
+            self.stringInput += '1'
+        elif (event.key == '2'):
+            self.stringInput += '2'
+        elif (event.key == '3'):
+            self.stringInput += '3'
+        elif (event.key == '4'):
+            self.stringInput += '4'
+        elif (event.key == '5'):
+            self.stringInput += '5'
+        elif (event.key == '6'):
+            self.stringInput += '6'
+        elif (event.key == '7'):
+            self.stringInput += '7'
+        elif (event.key == '8'):
+            self.stringInput += '8'
+        elif (event.key == '9'):
+            self.stringInput += '9'
+        elif (event.key == '0'):
+            self.stringInput += '0'
+        elif (event.key == ':'):
+            self.stringInput += ':'
+        elif (event.key == 'Space'):
+            if self.nameBool == True:
+                self.timeBool = True
+            else:
+                self.stringInput += ' '
+        elif (event.key == ','):
+            self.stringInput += ','
+        elif(event.key == 'Delete'):
+            if len(self.stringInput) >= 1:
+                self.stringInput = self.stringInput[:len(self.stringInput) - 1]
+        elif (event.key == 'Enter'):
+            if self.nameBool == False:
+                self.organization.name = self.stringInput
+                self.nameBool = True
+                self.stringInput = ''
+                print('name work')
+            else:
+                if self.timeBool == False:
+                    if self.stringInput not in self.possibleItems:
+                        print('not valid2')
+                        self.stringInput = ''
+                    else: 
+                        self.organization.items.append(self.stringInput)
+                        self.stringInput = ''
+                elif self.timeBool == True and not self.locationBool:
+                    print(self.stringInput)
+                    print(self.stringInput[2])
+                    if self.stringInput[2] == ':' and self.stringInput[:1].isdigit():
+                        self.time = self.stringInput
+                        print('successfully entered time')
+                        self.stringInput = ''
+                        self.locationBool = True
+                    else:
+                        print('not valid1')
+                        print(self.stringInput)
+                        self.stringInput = ''
+                        print(self.stringInput)
+                else: 
+                    for index in range(0,len(self.stringInput)):
+                        if self.stringInput[index] == ',':
+                            commaIndex = index
+                    print(commaIndex)
+                    self.organization.x = int(self.stringInput[0:index-1])
+                    self.organization.y = int(self.stringInput[index:])
+                    self.stringInput = ''
+                    print('successfully entered location')
                 
     def mousePressed(mode, event):
         if event.x >= mode.width / 2 - 47 and event.x <= mode.width / 2 + 47 and event.y >= mode.height / 2 - 17.5 and event.y <= mode.height / 2 + 17.5:
             #do something with to add to your recipient list 
             print('yes')
-            newOrganization = Organizations("John", 15,15, ['food'], "00:00")
+            newOrganization = Organizations(mode.organization.name, mode.organization.x,mode.organization.y, mode.organization.items, mode.organization.time)
             orgsList.append(newOrganization)
             print(orgsList)
         if event.x >= 15 and event.x <= 92 and event.y >= 15 and event.y <= 50:
@@ -511,13 +586,18 @@ class OrganizationMode(Mode):
             print('functioning')        
         
     def redrawAll(mode, canvas):
-        if mode.timeBool == False:
-            canvas.create_text(mode.width / 2, 25, text = 'Enter items')
+        if mode.nameBool == False:
+            canvas.create_text(mode.width / 2, 25, text = 'Enter Name:')
         else:
-            if mode.locationBool == False:
-                canvas.create_text(mode.width / 2, 25, text = 'Enter time: "XX:XX"')
+            if mode.timeBool == False:
+                canvas.create_text(mode.width / 2, 25, text = 'Enter items:')
             else:
-                canvas.create_text(mode.width / 2, 25, text = 'Enter location: "X,X"')
+                if mode.locationBool == False:
+                    canvas.create_text(mode.width / 2, 25, text = 'Enter time: "XX:XX"')
+                else:
+                    canvas.create_text(mode.width / 2, 25, text = 'Enter location: "X,X"')
+        canvas.create_text(mode.width / 8, 75, text = 'Name:')
+        canvas.create_text(mode.width / 8,100,text = mode.organization.name)
         canvas.create_text(mode.width / 2, 75, text = 'Your input:')
         canvas.create_text(mode.width / 2,100,text = mode.stringInput)
         canvas.create_rectangle(mode.width / 2 - 50,85,mode.width / 2 + 50,115)
