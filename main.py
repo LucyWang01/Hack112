@@ -1,3 +1,8 @@
+from cmu_112_graphics import *
+from tkinter import *
+from PIL import Image 
+import random
+
 class Users(object):
     def __init__():
         self.x = x
