@@ -28,10 +28,21 @@ class Recipients(Users):
         super().__init__(name, xcor, ycor)
 
 class StartMode(Mode):
+    def appStarted(mode):
+        mode.indiOG = mode.loadImage('Individual.png')
+        mode.indi = mode.scaleImage(mode.indiOG, 1/2)
+ 
+        mode.orgOG = mode.loadImage('Organizations.jpg')
+        
+        mode.org = mode.scaleImage(mode.orgOG, 2/3)
+ 
     def redrawAll(mode, canvas):
         font = 'Arial 26 bold'
         canvas.create_rectangle(0, 0, mode.width, mode.height,
                                 fill = 'lightblue')
+        canvas.create_image(200, 300, image=ImageTk.PhotoImage(mode.indi))
+        canvas.create_image(500, 300, image=ImageTk.PhotoImage(mode.org))
+
 
 class IndividualsMode(Mode):
     def appStarted(mode):
@@ -53,8 +64,9 @@ def mousePressed(mode, event):
 class MyModalApp(ModalApp):
     def appStarted(app):
         app.StartMode = StartMode()
-        app.VolunteersMode = VolunteersMode()
-        app.RecipientsMode = RecipientsMode()
+        app.IndividualsMode = IndividualsMode()
+        app.OrganizationsMode = OrganizationsMode()
+        #app.RecipientsMode = RecipientsMode()
 
         app.setActiveMode(app.StartMode)
         app.timerDelay = 50
