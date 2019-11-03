@@ -2,14 +2,12 @@
 from tkinter import *
 from PIL import Image 
 import random
-
 class Users(object):
     def __init__(self, name, xcor, ycor, items):
         self.name = name
         self.x = xcor
         self.y = ycor
         self.items = items
-
 class Volunteers(Users):
     def __init__(self, name, xcor, ycor):
         super().__init__(name, xcor, ycor)
@@ -17,16 +15,13 @@ class Volunteers(Users):
 class Organizations(Volunteers):
     def __init__(self, name, xcor, ycor):
         super().__init__(name, xcor, ycor)
-
 class Individuals(Volunteers):
     def __init__(self, name, xcor, ycor):
         super.__init__(name, xcor, ycor)
-
     
 class Recipients(Users):
     def __init__(self, name, xcor, ycor):
         super().__init__(name, xcor, ycor)
-
 class StartMode(Mode):
     def appStarted(mode):
         mode.indiOG = mode.loadImage('Individual.png')
@@ -42,12 +37,9 @@ class StartMode(Mode):
                                 fill = 'lightblue')
         canvas.create_image(200, 300, image=ImageTk.PhotoImage(mode.indi))
         canvas.create_image(500, 300, image=ImageTk.PhotoImage(mode.org))
-
-
 class IndividualsMode(Mode):
     def appStarted(mode):
         mode.individual = Individuals()
-
 class OrganizationsMode(Mode):
     def appStarted(mode):
         mode.organization = Organizations()
@@ -60,23 +52,18 @@ def mousePressed(mode, event):
             mode.app.setActiveMode(mode.app.VolunteersMode)
         elif:
             mode.app.setActiveMode(mode.app.RecipientsMode)
-
-
 class MyModalApp(ModalApp):
     def appStarted(app):
         app.StartMode = StartMode()
         app.IndividualsMode = IndividualsMode()
         app.OrganizationsMode = OrganizationsMode()
         #app.RecipientsMode = RecipientsMode()
-
         app.setActiveMode(app.StartMode)
         app.timerDelay = 50
     
-
 MyModalApp(width=500, height=500)
     
 ########
-
 class Goods(object):
     pass
 '''
@@ -167,10 +154,10 @@ class IndividualMode(Mode):
         r17 = Recipients("r17", -43, 2, ["water"])
         r18 = Recipients("r18", -90, -11, ["water"])
         r19 = Recipients("r19", 45, 23, ["water"])
-        r20 = Recipients("r20", 10, 11, ["clothes"])
+        r20 = Recipients("r20", 10, 11, ["blankets"])
         r21 = Recipients("r21", 11, 11, ["food", "water"])
         self.recipientList = [r21, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20]
-        self.volunteer = Volunteers('John', 0,0,[])
+        self.volunteer = Volunteers('John', 10, 11,[])
         self.possibleItems = ['food','water','blankets']
         url = 'https://i.imgur.com/99OnK6m.png'
         self.findRecipientButton = self.loadImage(url)
@@ -198,13 +185,26 @@ class IndividualMode(Mode):
                 bestCount = potential[recipient]
                 bestDistance = recipient.getDistance(volunteer)
         return bestRecipient
-    
+
+    def giveRecipient(self, recipient):
+        index = 0
+        while index < len(self.volunteer.items):
+            if self.volunteer.items[index] in recipient.items:
+                recipient.items.remove(self.volunteer.items[index])
+                self.volunteer.items.pop(index)
+                self.volunteer.x = recipient.x
+                self.volunteer.y = recipient.y
+            else:
+                index += 1
+                
     def mousePressed(self, event):
         if event.x >= self.width / 2 - 76 and event.x <= self.width / 2 + 76 and event.y >= self.height / 2 - 17.5 and event.y <= self.height / 2 + 17.5:
-            self.foundRecipient = self.findRecipient(self.volunteer, self.recipientList)
-            self.volunteer.items = []
-            print(self.foundRecipient)
-            #print('hi')
+            while len(self.volunteer.items) > 0:
+                self.foundRecipient = self.findRecipient(self.volunteer, self.recipientList)
+                self.giveRecipient(self.foundRecipient)
+                #self.volunteer.items = []
+                print(self.foundRecipient)
+                #print('hi')
         
     def keyPressed(self, event):
         if (event.key == "a"):  
