@@ -136,19 +136,14 @@ def findOrg(recipient, orgs):
                     potential[org] += 1
                 else:
                     potential[org] = 1
-    bestOrg = None
+    bestOrgs = []
     bestCount = 0
-    bestDistance = 10**9
     for org in potential:
         if potential[org] > bestCount:
             bestOrg = org
             bestCount = potential[org]
             bestDistance = org.getDistance(recipient)
-        elif potential[org] == bestCount and org.getDistance(recipient) < bestDistance:
-            bestOrg = org
-            bestCount = potential[org]
-            bestDistance = org.getDistance(recipient)
-    return bestOrg
+    return bestOrgs
 
 R1 = Recipients("R1", 19, 10, ["water", "food"])
 
