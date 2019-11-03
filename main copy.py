@@ -287,6 +287,7 @@ class RecipientMode(Mode):
         self.submitButton = self.loadImage(url)
         url1 = 'https://i.imgur.com/1N4h7mW.png'
         self.backButton = self.loadImage(url1)
+        self.orgListBool = False
         
     def startScreenMode(mode):
         print("activated")
@@ -304,6 +305,9 @@ class RecipientMode(Mode):
         canvas.create_text(mode.width / 2, 400, text = possibleItems, font = font)
         canvas.create_text(mode.width / 2, 420, text = possibleItems1, font = font)
         canvas.create_text(mode.width / 2, 440, text = possibleItems2, font = font)
+        if self.orgListBool:
+            for index in range(len(self.orgsList)):
+                canvas.create_text(mode.width / 2, 300 + 20 * i, text = str(self.orgsList[index]), font = font)
 
     #goes back to game mode after any key is pressed while in the help mode
     def mousePressed(mode, event):
@@ -312,11 +316,12 @@ class RecipientMode(Mode):
             print('yes')
             newRecipient = Recipients("John", 15,15, ['food'])
             recipientList.append(newRecipient)
+            self.orgListBool = True
             print(recipientList)
         if event.x >= 15 and event.x <= 92 and event.y >= 15 and event.y <= 50:
             mode.startScreenMode()
             print('functioning')
-
+        
 class OrganizationMode(Mode):
     def appStarted(self):
         self.stringInput = ''
