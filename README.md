@@ -1,2 +1,3 @@
 # Hack112
-This is our hack112 project
+Over half a million Americans go homeless on a single night in the United States. About 35 percent (just under 200,000) are found sleeping unsheltered on our streets in places not intended for human habitation. Additionally, over 1 in 5 pittsburghers experience food insecurity. On the other end of the spectrum, about 40% of food produced in the US ends up in the landfill or rots. Furthermore, people throw away thousands of goods each year. Our project works to bridge the gap between donors, recipients, and organizations. With groups like Pret A Manger, which gives away its remaining food at the end of each day, our goal is to decrease the number of people in need and decrease the waste that happens in the world. As some would say, "one man's trash is another man's treasure". 
+
